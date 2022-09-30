@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'kfit' => [
+        'urls' => [
+            'auth' => env('KFIT_AUTH_SERVICE_URL')
+        ]
+    ]
+
 ];
