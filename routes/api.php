@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,12 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('check.token')->get('/products', function (Request $request) {
-    return response()->json(
-        Http::baseUrl(config('services.kfit.urls.auth'))
-            ->acceptJson()
-            ->withToken($request->bearerToken())
-            ->get('/api/v1/clients/4/products')
-            ->json()
-    );
+Route::middleware('check.token')->group(function () {
+    Route::apiResource('courses', \App\Http\Controllers\ApiV1\CourseController::class);
+    Route::apiResource('workouts', \App\Http\Controllers\ApiV1\WorkoutController::class);
 });
