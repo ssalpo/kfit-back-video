@@ -191,12 +191,12 @@ class WorkoutController extends Controller
      * Change course progress for current user
      *
      * @OA\Put(
-     *     path="/courses/{course}/change-progress",
+     *     path="/workouts/{workout}/change-progress",
      *     tags={"Workouts"},
-     *     summary="Change course progress for current user",
+     *     summary="Change workout progress for current user",
      *     @OA\Parameter(
      *         in="path",
-     *         name="course",
+     *         name="workout",
      *         required=true,
      *         @OA\Schema(type="int"),
      *     ),
