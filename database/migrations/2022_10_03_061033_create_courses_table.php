@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('cover')->nullable()->comment('видео обложка / фото');
             $table->string('duration', 15)->nullable();
-            $table->tinyInteger('level')->default(\App\Constants\Cource::LEVEL_BEGINNER);
+            $table->tinyInteger('level')->default(\App\Constants\Course::LEVEL_BEGINNER);
             $table->string('muscles')->nullable();
             $table->string('type')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
         });
     }

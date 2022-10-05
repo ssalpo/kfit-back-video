@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\ApiV1;
 
+use App\Constants\GoodsType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WorkoutRequest;
 use App\Http\Resources\WorkoutResource;
 use App\Models\Workout;
+use App\Utils\User\ApiUser;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Http;
 
 class WorkoutController extends Controller
 {
@@ -157,5 +161,87 @@ class WorkoutController extends Controller
         $workout->delete();
 
         return new WorkoutResource($workout);
+    }
+
+
+    /**
+     * Display a list of related workouts for current user
+     *
+     * @OA\Get(
+     *     path="/workouts/my",
+     *     tags={"Workouts"},
+     *     summary="Display a list of related workouts for current user",
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutResource")
+     *      )
+     * )
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function my(): AnonymousResourceCollection
+    {
+        return WorkoutResource::collection(
+            Workout::whereIn('id', $this->getRelatedWorkoutIds())->paginate()
+        );
+    }
+
+    /**
+     * Change course progress for current user
+     *
+     * @OA\Put(
+     *     path="/courses/{course}/change-progress",
+     *     tags={"Workouts"},
+     *     summary="Change course progress for current user",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="course",
+     *         required=true,
+     *         @OA\Schema(type="int"),
+     *     ),
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/WorkoutProgressRequest")
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=202,
+     *         description="OK",
+     *         @OA\JsonContent(ref="#/components/schemas/WorkoutResource")
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @param Workout $workout
+     * @return WorkoutResource
+     */
+    public function changeProgress(Request $request, Workout $workout): WorkoutResource
+    {
+        $ids = $this->getRelatedWorkoutIds();
+
+        if (!in_array($workout->id, $ids) && !$workout->is_public) {
+            abort(404, 'Связанных тренировок не найдено.');
+        }
+
+        $workout->clientProgress()->updateOrCreate(
+            ['client_id' => app(ApiUser::class)->id],
+            ['status' => (int)$request->status]
+        );
+
+        return new WorkoutResource($workout->refresh());
+    }
+
+    /**
+     * Get list of related courses from network
+     *
+     * @return array
+     */
+    private function getRelatedWorkoutIds(): array
+    {
+        $relatedWorkouts = Http::withAuth()->get('/api/v1/users/goods/' . GoodsType::WORKOUT);
+
+        return array_column($relatedWorkouts->json(), 'related_id');
     }
 }

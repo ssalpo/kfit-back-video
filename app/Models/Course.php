@@ -18,5 +18,11 @@ class Course extends Model
         'muscles',
         'type',
         'description',
+        'is_public',
     ];
+
+    public function clientProgress()
+    {
+        return $this->morphOne(Progress::class, 'progressable')->whereClientId(app(ApiUser::class)->id);
+    }
 }

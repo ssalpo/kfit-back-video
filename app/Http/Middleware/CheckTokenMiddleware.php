@@ -26,10 +26,7 @@ class CheckTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $response = Http::baseUrl(config('services.kfit.urls.auth'))
-            ->acceptJson()
-            ->withToken($request->bearerToken())
-            ->get('/api/v1/users/me');
+        $response = Http::withAuth()->get('/api/v1/users/me');
 
         if($response->json('message') !== 'Unauthenticated.') {
             $this->apiUser->setUser($response->json('data'));

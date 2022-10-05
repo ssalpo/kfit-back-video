@@ -14,7 +14,7 @@ class ApiUser
     {
         $this->user = collect($user);
 
-        $this->roles = array_column($this->user->get('roles'), 'name');
+        $this->roles = array_column($this->user->get('roles', []), 'name');
     }
 
     public function __get(string $name)
@@ -33,6 +33,6 @@ class ApiUser
 
     public function isClient(): bool
     {
-        return count($this->roles) === 0;
+        return $this->id && count($this->roles) === 0;
     }
 }

@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('workouts', function (Blueprint $table) {
+        Schema::create('progress', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->tinyInteger('source_type')->nullable();
-            $table->string('source_id')->nullable();
-            $table->boolean('is_public')->default(false);
+            $table->unsignedBigInteger('client_id');
+            $table->tinyInteger('status')->nullable();
+            $table->unsignedBigInteger("progressable_id");
+            $table->string("progressable_type");
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('workouts');
+        Schema::dropIfExists('progress');
     }
 };
