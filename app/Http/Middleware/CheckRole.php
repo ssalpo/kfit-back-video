@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use App\Utils\User\ApiUser;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
-class CheckTokenMiddleware
+class CheckRole
 {
     private ApiUser $apiUser;
 
@@ -21,19 +20,15 @@ class CheckTokenMiddleware
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @param ApiUser $apiUser
+     * @param string $role
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, string $role)
     {
-        $response = Http::withAuth()->get('/api/v1/users/me');
-
-        if($response->json('message') !== 'Unauthenticated.') {
-            $this->apiUser->setUser($response->json('data'));
-
-            return $next($request);
+        if(!$this->apiUser->hasRole($role)) {
+            abort(403, 'У вас недостаточно прав для выполнения данного действия!');
         }
 
-        abort(403, $response->json('message'));
+        return $next($request);
     }
 }
