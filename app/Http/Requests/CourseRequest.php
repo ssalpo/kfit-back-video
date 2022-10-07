@@ -25,11 +25,11 @@ class CourseRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:255',
-            'cover' => 'nullable',
-            'duration' => 'nullable|string',
+            'cover' => 'nullable|string|max:255',
+            'duration' => 'nullable|string|max:255',
             'level' => 'nullable|numeric',
-            'muscles' => 'nullable|string',
-            'type' => 'nullable|string',
+            'muscles' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'is_public' => 'nullable|boolean',
         ];
