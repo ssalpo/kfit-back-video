@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
+use App\Services\CourseService;
 use App\Utils\User\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -14,9 +15,13 @@ use Illuminate\Support\Facades\Http;
 
 class CourseController extends Controller
 {
-    public function __construct()
+    private CourseService $courseService;
+
+    public function __construct(CourseService $courseService)
     {
         $this->middleware('role:admin')->except('index', 'my', 'changeProgress');
+
+        $this->courseService = $courseService;
     }
 
     /**
@@ -68,7 +73,7 @@ class CourseController extends Controller
     public function store(CourseRequest $request): CourseResource
     {
         return new CourseResource(
-            Course::create($request)
+            $this->courseService->create($request->validated())
         );
     }
 
@@ -127,15 +132,13 @@ class CourseController extends Controller
      * )
      *
      * @param CourseRequest $request
-     * @param Course $course
+     * @param int $course
      * @return CourseResource
      */
-    public function update(CourseRequest $request, Course $course): CourseResource
+    public function update(CourseRequest $request, int $course): CourseResource
     {
-        $course->update($request->validated());
-
         return new CourseResource(
-            $course->refresh()
+            $this->courseService->update($course, $request->validated())
         );
     }
 
@@ -159,15 +162,13 @@ class CourseController extends Controller
      *     )
      * )
      *
-     * @param Course $course
+     * @param int $course
      * @return CourseResource
      */
-    public function destroy(Course $course): CourseResource
+    public function destroy(int $course): CourseResource
     {
-        $course->delete();
-
         return new CourseResource(
-            $course->refresh()
+            $this->courseService->delete($course)
         );
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WorkoutResource extends JsonResource
+class TempFileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,7 @@ class WorkoutResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'source_type' => $this->source_type,
-            'source_id' => $this->source_id,
-            'is_public' => $this->is_public,
-            'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
+            'user_filename' => $this->user_filename,
         ];
     }
 }
