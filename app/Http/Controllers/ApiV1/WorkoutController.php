@@ -16,7 +16,7 @@ class WorkoutController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:admin')->except('index');
+        $this->middleware('role:admin')->except('index', 'my', 'changeProgress');
     }
 
     /**
@@ -37,7 +37,7 @@ class WorkoutController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return WorkoutResource::collection(Workout::class);
+        return WorkoutResource::collection(Workout::paginate());
     }
 
     /**
@@ -130,6 +130,8 @@ class WorkoutController extends Controller
      */
     public function update(WorkoutRequest $request, Workout $workout): WorkoutResource
     {
+        $workout->update($request->validated());
+
         return new WorkoutResource($workout);
     }
 

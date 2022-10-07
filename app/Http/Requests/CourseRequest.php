@@ -30,6 +30,8 @@ class CourseRequest extends FormRequest
             'level' => 'nullable|numeric',
             'muscles' => 'nullable|string',
             'type' => 'nullable|string',
+            'description' => 'nullable|string',
+            'is_public' => 'nullable|boolean',
         ];
     }
 }

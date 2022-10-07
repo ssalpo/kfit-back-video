@@ -21,6 +21,10 @@ class Course extends Model
         'is_public',
     ];
 
+    protected $casts = [
+        'is_public' => 'boolean'
+    ];
+
     public function clientProgress()
     {
         return $this->morphOne(Progress::class, 'progressable')->whereClientId(app(ApiUser::class)->id);

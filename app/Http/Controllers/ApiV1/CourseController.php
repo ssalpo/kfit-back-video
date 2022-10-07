@@ -68,7 +68,7 @@ class CourseController extends Controller
     public function store(CourseRequest $request): CourseResource
     {
         return new CourseResource(
-            Course::create($request)
+            Course::create($request->validated())
         );
     }
 

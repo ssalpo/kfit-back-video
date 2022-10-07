@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\Workout;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WorkoutRequest extends FormRequest
@@ -25,8 +26,9 @@ class WorkoutRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'source_type' => 'required|numeric',
-            'source_id' => 'required|string'
+            'source_type' => 'required|numeric|in:' . implode(',', Workout::SOURCE_LIST),
+            'source_id' => 'required|string',
+            'is_public' => 'required|boolean',
         ];
     }
 }

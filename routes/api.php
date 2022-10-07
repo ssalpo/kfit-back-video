@@ -19,6 +19,6 @@ Route::middleware('check.token')->group(function () {
     Route::apiResource('courses', \App\Http\Controllers\ApiV1\CourseController::class);
 
     Route::get('workouts/my', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'my']);
-    Route::post('/courses/{course}/change-progress', [\App\Http\Controllers\ApiV1\CourseController::class, 'changeProgress']);
+    Route::post('/workouts/{workout}/change-progress', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'changeProgress']);
     Route::apiResource('workouts', \App\Http\Controllers\ApiV1\WorkoutController::class);
 });
