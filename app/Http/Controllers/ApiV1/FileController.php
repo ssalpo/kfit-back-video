@@ -7,6 +7,7 @@ use App\Http\Requests\TempFileImageRequest;
 use App\Http\Requests\TempFileUploadRequest;
 use App\Http\Resources\TempFileResource;
 use App\Services\TempFileService;
+use OpenApi\Annotations as OA;
 
 class FileController extends Controller
 {

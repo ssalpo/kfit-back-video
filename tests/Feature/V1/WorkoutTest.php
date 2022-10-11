@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\WorkoutHelper;
+use Tests\Helpers\WorkoutVideoFakeHelper;
 use Tests\TestCase;
 
 class WorkoutTest extends TestCase
@@ -183,7 +184,6 @@ class WorkoutTest extends TestCase
     {
         AuthServiceFakerHelper::actAsClient();
 
-
         $relatedWorkouts = AuthServiceFakerHelper::relatedWorkouts();
 
         $response = $this->post('/api/v1/workouts/' . $relatedWorkouts[0] . '/change-progress', [
@@ -195,5 +195,51 @@ class WorkoutTest extends TestCase
                 'data' => array_merge(self::RESOURCE_STRUCTURE, ['progress'])
             ])
             ->assertJsonPath('data.progress.status', ProgressStatus::PROCESS);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_see_workout_external_videos_list(): void
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        WorkoutVideoFakeHelper::initServicesFakeData();
+
+        $workout = WorkoutHelper::getOneRandom();
+
+        $response = $this->get('/api/v1/workouts/' . $workout->id . '/videos');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data'])
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id', 'link'
+                    ]
+                ]
+            ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_see_workout_external_video_by_id(): void
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        WorkoutVideoFakeHelper::initServicesFakeData();
+
+        $workout = WorkoutHelper::getOneRandom();
+
+        $response = $this->get('/api/v1/workouts/' . $workout->id . '/videos/404743e1-4ec5-485e-b762-43440a8ab69b');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data'])
+            ->assertJsonStructure([
+                'data' => [
+                    'id', 'link'
+                ]
+            ]);
     }
 }

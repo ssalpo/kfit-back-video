@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\WorkoutRequest;
 use App\Http\Resources\WorkoutResource;
 use App\Models\Workout;
+use App\Services\External\VideoHosting\VideoManager;
 use App\Utils\User\ApiUser;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Http;
+use OpenApi\Annotations as OA;
 
 class WorkoutController extends Controller
 {
@@ -233,6 +236,37 @@ class WorkoutController extends Controller
         );
 
         return new WorkoutResource($workout->refresh());
+    }
+
+    /**
+     * Find the list of videos from external services
+     *
+     * @param Workout $workout
+     * @return JsonResponse
+     */
+    public function getExternalVideos(Workout $workout): JsonResponse
+    {
+        $service = VideoManager::make($workout->source_type, $workout->source_id);
+
+        return response()->json([
+            'data' => $service->list()
+        ]);
+    }
+
+    /**
+     * Find external video by id
+     *
+     * @param Workout $workout
+     * @param string $videoId
+     * @return JsonResponse
+     */
+    public function getVideoById(Workout $workout, string $videoId): JsonResponse
+    {
+        $service = VideoManager::make($workout->source_type, $workout->source_id);
+
+        return response()->json([
+            'data' => $service->findById($videoId)
+        ]);
     }
 
     /**

@@ -35,6 +35,11 @@ return [
         'urls' => [
             'auth' => env('KFIT_AUTH_SERVICE_URL')
         ]
+    ],
+
+    'kinescope' => [
+        'token' => env('KINESCOPE_TOKEN'),
+        'url' => env('KINESCOPE_URL', 'https://api.kinescope.io/v1')
     ]
 
 ];

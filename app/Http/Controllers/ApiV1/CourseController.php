@@ -12,6 +12,7 @@ use App\Utils\User\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Http;
+use OpenApi\Annotations as OA;
 
 class CourseController extends Controller
 {
