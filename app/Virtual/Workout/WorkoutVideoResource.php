@@ -6,20 +6,20 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     title="Workout progress request",
+ *     title="Workout video resource",
  *     @OA\Xml(
- *         name="WorkoutProgressRequest"
+ *         name="WorkoutVideoResource"
  *     )
  * )
  */
-class WorkoutProgressRequest
+class WorkoutVideoResource
 {
     /**
      * @OA\Property(
-     *     title="status"
+     *     title="data"
      * )
      *
-     * @var int
+     * @var object
      */
-    private $status;
+    private $data;
 }

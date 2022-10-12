@@ -2,17 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::middleware('check.token')->group(function () {
     // Course routes
     Route::get('courses/my', [\App\Http\Controllers\ApiV1\CourseController::class, 'my']);
@@ -20,8 +9,11 @@ Route::middleware('check.token')->group(function () {
     Route::apiResource('courses', \App\Http\Controllers\ApiV1\CourseController::class);
 
     // Workout routes
-    Route::get('workouts/my', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'my']);
+    Route::get('/workouts/my', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'my']);
     Route::post('/workouts/{workout}/change-progress', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'changeProgress']);
+    Route::get('/workouts/{workout}/videos', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'getExternalVideos']);
+    Route::post('/workouts/{workout}/videos/upload', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'uploadVideoById']);
+    Route::get('/workouts/{workout}/videos/{video}', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'getVideoById']);
     Route::apiResource('workouts', \App\Http\Controllers\ApiV1\WorkoutController::class);
 
     // File routes
