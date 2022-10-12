@@ -39,7 +39,8 @@ return [
 
     'kinescope' => [
         'token' => env('KINESCOPE_TOKEN'),
-        'url' => env('KINESCOPE_URL', 'https://api.kinescope.io/v1')
+        'url' => env('KINESCOPE_URL', 'https://api.kinescope.io/v1'),
+        'uploader_url' => env('KINESCOPE_UPLOADER_URL', 'https://uploader.kinescope.io'),
     ]
 
 ];

@@ -6,6 +6,8 @@ use App\Constants\ProgressStatus;
 use App\Models\Workout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\WorkoutHelper;
@@ -211,14 +213,7 @@ class WorkoutTest extends TestCase
         $response = $this->get('/api/v1/workouts/' . $workout->id . '/videos');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['data'])
-            ->assertJsonStructure([
-                'data' => [
-                    '*' => [
-                        'id', 'link'
-                    ]
-                ]
-            ]);
+            ->assertJsonStructure(['data']);
     }
 
     /**
@@ -235,11 +230,26 @@ class WorkoutTest extends TestCase
         $response = $this->get('/api/v1/workouts/' . $workout->id . '/videos/404743e1-4ec5-485e-b762-43440a8ab69b');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['data'])
-            ->assertJsonStructure([
-                'data' => [
-                    'id', 'link'
-                ]
-            ]);
+            ->assertJsonStructure(['data']);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_upload_workout_video_to_external_service(): void
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        WorkoutVideoFakeHelper::initServicesFakeData();
+
+        $workout = WorkoutHelper::getOneRandom();
+
+        $response = $this->postJson('/api/v1/workouts/' . $workout->id . '/videos/upload', [
+            'filename' => 'Video.mp4',
+            'link' => 'ftp://username:password@host/video.mp4',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data']);
     }
 }

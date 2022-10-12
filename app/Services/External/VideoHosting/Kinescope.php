@@ -2,6 +2,7 @@
 
 namespace App\Services\External\VideoHosting;
 
+use App\Models\Workout;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
@@ -20,28 +21,39 @@ class Kinescope implements Video
             ->baseUrl(config('services.kinescope.url'));
     }
 
-    public function list()
+    /**
+     * @inheritDoc
+     */
+    public function list(): array
     {
-        $data = $this->client()->get(
+        return $this->client()->get(
             '/videos', ['per_page' => 100, 'project_id' => $this->projectId]
         )->json('data', []);
-
-        return array_map(
-            fn($item) => [
-                'id' => $item['id'],
-                'link' => $item['play_link']
-            ],
-            $data
-        );
     }
 
-    public function findById(string $id)
+    /**
+     * @inheritDoc
+     */
+    public function findById(string $id): array
     {
-        $data = $this->client()->get('/videos/' . $id)->json('data');
+        return $this->client()->get('/videos/' . $id)->json('data', []);
+    }
 
-        return [
-            'id' => $data['id'],
-            'link' => $data['play_link']
-        ];
+
+    /**
+     * @inheritDoc
+     */
+    public function upload(Workout $workout, string $filename, string $link): array
+    {
+        return $this->client()
+            ->baseUrl(config('services.kinescope.uploader_url'))
+            ->withHeaders([
+                'X-Project-ID' => $workout->source_id,
+                'X-Video-Title' => $workout->title,
+                'X-File-Name' => $filename,
+                'X-Video-URL' => $link,
+            ])
+            ->post('/video')
+            ->json('data', []);
     }
 }

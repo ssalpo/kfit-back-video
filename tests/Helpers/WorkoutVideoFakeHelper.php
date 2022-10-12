@@ -11,6 +11,8 @@ class WorkoutVideoFakeHelper
         self::kinescopeVideos();
 
         self::kinescopeVideo();
+
+        self::kinescopeUploader();
     }
 
     public static function kinescopeVideos()
@@ -258,6 +260,36 @@ class WorkoutVideoFakeHelper
 
         Http::fake([
             config('services.kinescope.url') . '/videos/404743e1-4ec5-485e-b762-43440a8ab69b' => Http::response($data)
+        ]);
+
+        return $data;
+    }
+
+    public static function kinescopeUploader()
+    {
+        $data = [
+            "data" => [
+                "id" => "ef68728b-7604-4af9-81ca-2d84f14e44556",
+                "project_id" => "5c64ee06-3104-4cd4-a364-709d9f291eaf",
+                "folder_id" => null,
+                "player_id" => "aa8fdbd8-f890-4554-bbfd-3325780b3edd",
+                "type" => "video",
+                "status" => "uploading",
+                "title" => "Simple workout from external source",
+                "description" => "",
+                "version" => 1,
+                "privacy_type" => "anywhere",
+                "privacy_domains" => [],
+                "tags" => [],
+                "play_link" => "https://kinescope.io/201911567",
+                "embed_link" => "https://kinescope.io/embed/201911567",
+                "created_at" => "2022-10-12T03:25:25.658858Z",
+                "poster" => null
+            ]
+        ];
+
+        Http::fake([
+            config('services.kinescope.uploader_url') . '/video' => Http::response($data)
         ]);
 
         return $data;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ApiV1;
 use App\Constants\GoodsType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WorkoutRequest;
+use App\Http\Requests\WorkoutVideoUploadRequest;
 use App\Http\Resources\WorkoutResource;
 use App\Models\Workout;
 use App\Services\External\VideoHosting\VideoManager;
@@ -241,6 +242,17 @@ class WorkoutController extends Controller
     /**
      * Find the list of videos from external services
      *
+     * @OA\Get(
+     *     path="/workouts/{workout}/videos",
+     *     tags={"Workouts"},
+     *     summary="Find the list of videos from external services",
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutVideoResource")
+     *      )
+     * )
+     *
      * @param Workout $workout
      * @return JsonResponse
      */
@@ -256,6 +268,23 @@ class WorkoutController extends Controller
     /**
      * Find external video by id
      *
+     * @OA\Get(
+     *     path="/workouts/{workout}/videos/{video}",
+     *     tags={"Workouts"},
+     *     summary="Find external video by id",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="video",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutVideoResource")
+     *      )
+     * )
+     *
      * @param Workout $workout
      * @param string $videoId
      * @return JsonResponse
@@ -266,6 +295,39 @@ class WorkoutController extends Controller
 
         return response()->json([
             'data' => $service->findById($videoId)
+        ]);
+    }
+
+    /**
+     * Upload external video
+     *
+     * @OA\Post(
+     *     path="/workouts/{workout}/videos/upload",
+     *     tags={"Workouts"},
+     *     summary="Upload external video",
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/WorkoutVideoUploadRequest")
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(ref="#/components/schemas/WorkoutVideoResource")
+     *     )
+     * )
+     *
+     * @param Workout $workout
+     * @param WorkoutVideoUploadRequest $request
+     * @return JsonResponse
+     */
+    public function uploadVideoById(Workout $workout, WorkoutVideoUploadRequest $request): JsonResponse
+    {
+        $service = VideoManager::make($workout->source_type, $workout->source_id);
+
+        return response()->json([
+            'data' => $service->upload($workout, $request->filename, $request->link)
         ]);
     }
 
