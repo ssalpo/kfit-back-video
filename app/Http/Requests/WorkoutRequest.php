@@ -29,6 +29,7 @@ class WorkoutRequest extends FormRequest
             'source_type' => 'required|numeric|in:' . implode(',', Workout::SOURCE_LIST),
             'source_id' => 'required|string',
             'is_public' => 'required|boolean',
+            'recommendations' => 'nullable|array'
         ];
     }
 }

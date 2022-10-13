@@ -35,7 +35,7 @@ class CourseController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/CourseResource")
+     *          @OA\JsonContent(ref="#/components/schemas/CourseCollectionResource")
      *      )
      * )
      *
@@ -44,8 +44,29 @@ class CourseController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return CourseResource::collection(
-            Course::paginate()
+            Course::with('recommendations')->paginate()
         );
+    }
+
+    /**
+     * Display a listing of the all resource.
+     *
+     * @OA\Get(
+     *     path="/courses/all",
+     *     tags={"Courses"},
+     *     summary="Display a listing of the all resource.",
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/CourseCollectionResource")
+     *      )
+     * )
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function all(): AnonymousResourceCollection
+    {
+        return CourseResource::collection(Course::all());
     }
 
     /**
@@ -103,6 +124,8 @@ class CourseController extends Controller
      */
     public function show(Course $course): CourseResource
     {
+        $course->load('recommendations');
+
         return new CourseResource($course);
     }
 
@@ -111,7 +134,7 @@ class CourseController extends Controller
      *
      * @OA\Put(
      *     path="/courses/{course}",
-     *     tags={"Workouts"},
+     *     tags={"Courses"},
      *     summary="Update the specified resource in storage.",
      *     @OA\Parameter(
      *         in="path",
@@ -148,7 +171,7 @@ class CourseController extends Controller
      *
      * @OA\Delete(
      *     path="/courses/{course}",
-     *     tags={"Workouts"},
+     *     tags={"Courses"},
      *     summary="Remove the specified resource from storage.",
      *     @OA\Parameter(
      *         in="path",
@@ -183,7 +206,7 @@ class CourseController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/CourseResource")
+     *          @OA\JsonContent(ref="#/components/schemas/CourseCollectionResource")
      *      )
      * )
      *
@@ -194,6 +217,7 @@ class CourseController extends Controller
         return CourseResource::collection(
             Course::whereIn('id', $this->getRelatedCourseIds())
                 ->with('clientProgress')
+                ->with('recommendations')
                 ->orWhere('is_public', true)
                 ->paginate()
         );
@@ -204,7 +228,7 @@ class CourseController extends Controller
      *
      * @OA\Put(
      *     path="/courses/{course}/change-progress",
-     *     tags={"Workouts"},
+     *     tags={"Courses"},
      *     summary="Change course progress for current user",
      *     @OA\Parameter(
      *         in="path",

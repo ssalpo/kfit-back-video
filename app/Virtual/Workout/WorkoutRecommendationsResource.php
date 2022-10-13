@@ -6,10 +6,10 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     title="Workout resource"
+ *     title="Workout recommendations resource"
  * )
  */
-class WorkoutResource
+class WorkoutRecommendationsResource
 {
     /**
      * @OA\Property(
@@ -37,14 +37,4 @@ class WorkoutResource
      * @var string
      */
     private $source_id;
-
-    /**
-     * @OA\Property(
-     *     title="recommendations",
-     *     @OA\Items(ref="#/components/schemas/WorkoutRecommendationsResource")
-     * )
-     *
-     * @var array
-     */
-    private $recommendations;
 }

@@ -29,4 +29,9 @@ class Course extends Model
     {
         return $this->morphOne(Progress::class, 'progressable')->whereClientId(app(ApiUser::class)->id);
     }
+
+    public function recommendations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(__CLASS__, 'recommended_courses', 'course_id', 'recommended_id');
+    }
 }

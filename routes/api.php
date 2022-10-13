@@ -6,10 +6,12 @@ Route::middleware('check.token')->group(function () {
     // Course routes
     Route::get('courses/my', [\App\Http\Controllers\ApiV1\CourseController::class, 'my']);
     Route::post('/courses/{course}/change-progress', [\App\Http\Controllers\ApiV1\CourseController::class, 'changeProgress']);
+    Route::get('/courses/all', [\App\Http\Controllers\ApiV1\CourseController::class, 'all']);
     Route::apiResource('courses', \App\Http\Controllers\ApiV1\CourseController::class);
 
     // Workout routes
     Route::get('/workouts/my', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'my']);
+    Route::get('/workouts/all', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'all']);
     Route::post('/workouts/{workout}/change-progress', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'changeProgress']);
     Route::get('/workouts/{workout}/videos', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'getExternalVideos']);
     Route::post('/workouts/{workout}/videos/upload', [\App\Http\Controllers\ApiV1\WorkoutController::class, 'uploadVideoById']);
