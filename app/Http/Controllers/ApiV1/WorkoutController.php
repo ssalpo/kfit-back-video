@@ -228,6 +228,7 @@ class WorkoutController extends Controller
         return WorkoutResource::collection(
             Workout::whereIn('id', $this->getRelatedWorkoutIds())
                 ->with('recommendations')
+                ->filter()
                 ->paginate()
         );
     }

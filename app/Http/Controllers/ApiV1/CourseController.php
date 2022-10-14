@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\ApiV1;
 
-use App\Constants\GoodsType;
+use App\ApiRequests\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Http\Resources\CourseResource;
@@ -11,8 +11,9 @@ use App\Services\CourseService;
 use App\Utils\User\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Http;
 use OpenApi\Annotations as OA;
+use function abort;
+use function app;
 
 class CourseController extends Controller
 {
@@ -215,10 +216,11 @@ class CourseController extends Controller
     public function my(): AnonymousResourceCollection
     {
         return CourseResource::collection(
-            Course::whereIn('id', $this->getRelatedCourseIds())
+            Course::whereIn('id', User::getRelatedCourseIds())
                 ->with('clientProgress')
                 ->with('recommendations')
                 ->orWhere('is_public', true)
+                ->filter()
                 ->paginate()
         );
     }
@@ -255,7 +257,7 @@ class CourseController extends Controller
      */
     public function changeProgress(Request $request, Course $course): CourseResource
     {
-        $ids = $this->getRelatedCourseIds();
+        $ids = User::getRelatedCourseIds();
 
         if (!in_array($course->id, $ids) && !$course->is_public) {
             abort(404, 'Связанных курсов не найдено.');
@@ -267,17 +269,5 @@ class CourseController extends Controller
         );
 
         return new CourseResource($course->refresh());
-    }
-
-    /**
-     * Get list of related courses from network
-     *
-     * @return array
-     */
-    private function getRelatedCourseIds(): array
-    {
-        $relatedCourses = Http::withAuth()->get('/api/v1/users/goods/' . GoodsType::COURSE);
-
-        return array_column($relatedCourses->json(), 'related_id');
     }
 }

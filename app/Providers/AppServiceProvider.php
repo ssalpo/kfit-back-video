@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'course' => Course::class,
-            'workouts' => Workout::class,
+            'workout' => Workout::class,
         ]);
 
         Http::macro('withAuth', function () {
