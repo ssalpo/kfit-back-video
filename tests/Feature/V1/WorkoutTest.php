@@ -19,7 +19,7 @@ class WorkoutTest extends TestCase
     use RefreshDatabase;
 
     const RESOURCE_STRUCTURE = [
-        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations'
+        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations', 'rating'
     ];
 
     protected function setUp(): void

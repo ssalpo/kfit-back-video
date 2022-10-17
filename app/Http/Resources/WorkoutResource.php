@@ -21,7 +21,8 @@ class WorkoutResource extends JsonResource
             'source_id' => $this->source_id,
             'is_public' => $this->is_public,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
-            'recommendations' => self::collection($this->whenLoaded('recommendations'))
+            'recommendations' => self::collection($this->whenLoaded('recommendations')),
+            'rating' => $this->rating
         ];
     }
 }

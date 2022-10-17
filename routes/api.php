@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiV1\Course\CourseFavoriteController;
 use App\Http\Controllers\ApiV1\CourseController;
 use App\Http\Controllers\ApiV1\FavoriteController;
 use App\Http\Controllers\ApiV1\FileController;
+use App\Http\Controllers\ApiV1\RatingController;
 use App\Http\Controllers\ApiV1\WorkoutController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,9 @@ Route::middleware('check.token')->group(function () {
     // Favorites route
     Route::post('/favorites', [FavoriteController::class, 'store']);
     Route::post('/favorites/delete', [FavoriteController::class, 'destroy']);
+
+    // Ratings route
+    Route::post('/ratings', [RatingController::class, 'store']);
 
     // Workout routes
     Route::get('/workouts/my', [WorkoutController::class, 'my']);

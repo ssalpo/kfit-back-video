@@ -15,6 +15,7 @@ class Workout extends Model
         'source_type',
         'source_id',
         'is_public',
+        'rating',
     ];
 
     protected $casts = [
@@ -44,5 +45,10 @@ class Workout extends Model
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoriteable');
+    }
+
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }

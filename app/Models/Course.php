@@ -19,6 +19,7 @@ class Course extends Model
         'type',
         'description',
         'is_public',
+        'rating',
     ];
 
     protected $casts = [
@@ -48,5 +49,10 @@ class Course extends Model
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoriteable');
+    }
+
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }

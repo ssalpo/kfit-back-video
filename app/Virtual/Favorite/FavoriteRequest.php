@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Virtual\Course;
+namespace App\Virtual\Favorite;
 
 use OpenApi\Annotations as OA;
 

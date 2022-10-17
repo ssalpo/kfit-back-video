@@ -15,7 +15,7 @@ class CourseTest extends TestCase
     use RefreshDatabase;
 
     const RESOURCE_STRUCTURE = [
-        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type'
+        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type', 'rating'
     ];
 
     protected function setUp(): void
