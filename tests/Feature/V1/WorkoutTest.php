@@ -17,7 +17,7 @@ use Tests\TestCase;
 class WorkoutTest extends TestCase
 {
     const RESOURCE_STRUCTURE = [
-        'id', 'title', 'source_type', 'source_id', 'is_public',
+        'id', 'title', 'source_type', 'source_id', 'is_public', 'active'
     ];
 
 
@@ -251,5 +251,27 @@ class WorkoutTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data']);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_change_workout_activity_status()
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        $workout = WorkoutHelper::getOneRandom();
+
+        $response = $this->post('/api/v1/workouts/' . $workout->id . '/change-activity', [
+            'status' => 1
+        ]);
+
+        $response->assertStatus(200);
+
+        $response = $this->getJson('/api/v1/workouts/' . $workout->id);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.active', true);
     }
 }

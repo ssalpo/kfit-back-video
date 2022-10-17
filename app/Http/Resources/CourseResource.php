@@ -23,6 +23,7 @@ class CourseResource extends JsonResource
             'muscles' => $this->muscles,
             'type' => $this->type,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
+            'active' => $this->active
         ];
     }
 }

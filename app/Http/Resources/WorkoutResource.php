@@ -21,6 +21,7 @@ class WorkoutResource extends JsonResource
             'source_id' => $this->source_id,
             'is_public' => $this->is_public,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
+            'active' => $this->active
         ];
     }
 }

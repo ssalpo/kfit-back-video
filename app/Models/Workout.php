@@ -15,10 +15,12 @@ class Workout extends Model
         'source_type',
         'source_id',
         'is_public',
+        'active'
     ];
 
     protected $casts = [
-        'is_public' => 'boolean'
+        'is_public' => 'boolean',
+        'active' => 'boolean'
     ];
 
     public function clientProgress()
