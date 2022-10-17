@@ -27,7 +27,7 @@ class RatingRequest extends FormRequest
         return [
             'id' => 'required|numeric',
             'type' => 'required|in:' . implode(',', Rating::TYPES),
-            'rating' => 'required|digits_between:1,5'
+            'rating' => 'required|numeric|between:1,5'
         ];
     }
 }

@@ -40,7 +40,7 @@ class RatingRequest
      *     example="3"
      * )
      *
-     * @var int
+     * @var float
      */
     private $rating;
 }

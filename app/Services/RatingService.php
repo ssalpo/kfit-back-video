@@ -56,7 +56,7 @@ class RatingService
 
     public function recalculateModelRatings(int $modelId, string $modelType): void
     {
-        $ratings = Rating::select('ratingable_id', DB::raw('ROUND(AVG(rating), 2) as rating'))
+        $ratings = Rating::select('ratingable_id', DB::raw('CAST(AVG(rating) AS DECIMAL(5, 2)) as rating'))
             ->where('ratingable_type', $modelType)
             ->where('ratingable_id', $modelId)
             ->groupBy('ratingable_id')
