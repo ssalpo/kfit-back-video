@@ -27,9 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Relation::enforceMorphMap([
+        Relation::morphMap([
             'course' => Course::class,
-            'workouts' => Workout::class,
+            'workout' => Workout::class,
         ]);
 
         Http::macro('withAuth', function () {

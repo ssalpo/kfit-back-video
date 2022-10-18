@@ -6,8 +6,6 @@ use App\Constants\ProgressStatus;
 use App\Models\Workout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\WorkoutHelper;
@@ -16,8 +14,10 @@ use Tests\TestCase;
 
 class WorkoutTest extends TestCase
 {
-    const RESOURCE_STRUCTURE = [
-        'id', 'title', 'source_type', 'source_id', 'is_public', 'active'
+    use RefreshDatabase;
+
+    public const RESOURCE_STRUCTURE = [
+        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations', 'rating', 'active'
     ];
 
 
@@ -25,7 +25,24 @@ class WorkoutTest extends TestCase
     {
         parent::setUp();
 
-        Workout::factory(10)->create();
+        WorkoutHelper::makeWithRecommendations();
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_see_list_of_all_workouts()
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        $response = $this->get('/api/v1/workouts/all');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations'])
+                ]
+            ]);
     }
 
     /**
@@ -54,11 +71,14 @@ class WorkoutTest extends TestCase
     {
         AuthServiceFakerHelper::actAsAdmin();
 
+        $recommendations = Workout::factory(10)->create()->pluck('id')->toArray();
+
         $form = [
             'title' => 'First workout for client',
             'source_type' => 1,
             'source_id' => Str::random(),
             'is_public' => false,
+            'recommendations' => $recommendations
         ];
 
         $response = $this->postJson('/api/v1/workouts', $form);
@@ -107,9 +127,6 @@ class WorkoutTest extends TestCase
         $response = $this->putJson('/api/v1/workouts/' . $record->id, $form);
 
         $response->assertStatus(200)
-            ->assertJsonStructure([
-                'data' => self::RESOURCE_STRUCTURE
-            ])
             ->assertJsonPath('data.title', $form['title'])
             ->assertJsonPath('data.is_public', $form['is_public'])
             ->assertJsonPath('data.id', $record->id);
@@ -128,7 +145,7 @@ class WorkoutTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data' => self::RESOURCE_STRUCTURE
+                'data' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations'])
             ]);
     }
 

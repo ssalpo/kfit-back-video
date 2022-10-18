@@ -34,7 +34,7 @@ class WorkoutController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/WorkoutResource")
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutCollectionResource")
      *      )
      * )
      *
@@ -42,7 +42,30 @@ class WorkoutController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return WorkoutResource::collection(Workout::paginate());
+        return WorkoutResource::collection(
+            Workout::with('recommendations')->paginate()
+        );
+    }
+
+    /**
+     * Display a listing of the all resource.
+     *
+     * @OA\Get(
+     *     path="/workouts/all",
+     *     tags={"Workouts"},
+     *     summary="Display a listing of the all resource.",
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutCollectionResource")
+     *      )
+     * )
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function all(): AnonymousResourceCollection
+    {
+        return WorkoutResource::collection(Workout::all());
     }
 
     /**
@@ -70,9 +93,15 @@ class WorkoutController extends Controller
      */
     public function store(WorkoutRequest $request): WorkoutResource
     {
-        return new WorkoutResource(
-            Workout::create($request->validated())
-        );
+        $workout = Workout::create($request->validated());
+
+        if($request->has('recommendations')) {
+            $workout->recommendations()->sync($request->recommendations);
+        }
+
+        $workout->load('recommendations');
+
+        return new WorkoutResource($workout->refresh());
     }
 
     /**
@@ -100,6 +129,8 @@ class WorkoutController extends Controller
      */
     public function show(Workout $workout): WorkoutResource
     {
+        $workout->load('recommendations');
+
         return new WorkoutResource($workout);
     }
 
@@ -135,9 +166,15 @@ class WorkoutController extends Controller
      */
     public function update(WorkoutRequest $request, Workout $workout): WorkoutResource
     {
+        $workout->load('recommendations');
+
         $workout->update($request->validated());
 
-        return new WorkoutResource($workout);
+        if($request->has('recommendations')) {
+            $workout->recommendations()->sync($request->recommendations);
+        }
+
+        return new WorkoutResource($workout->refresh());
     }
 
     /**
@@ -181,7 +218,7 @@ class WorkoutController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/WorkoutResource")
+     *          @OA\JsonContent(ref="#/components/schemas/WorkoutCollectionResource")
      *      )
      * )
      *
@@ -190,7 +227,10 @@ class WorkoutController extends Controller
     public function my(): AnonymousResourceCollection
     {
         return WorkoutResource::collection(
-            Workout::whereIn('id', $this->getRelatedWorkoutIds())->paginate()
+            Workout::whereIn('id', $this->getRelatedWorkoutIds())
+                ->with('recommendations')
+                ->filter()
+                ->paginate()
         );
     }
 
@@ -237,7 +277,7 @@ class WorkoutController extends Controller
             ['status' => (int)$request->status]
         );
 
-        return new WorkoutResource($workout->refresh());
+        return new WorkoutResource($workout->load('recommendations')->refresh());
     }
 
     /**

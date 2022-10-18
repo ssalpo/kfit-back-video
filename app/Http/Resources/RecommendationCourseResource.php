@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CourseResource extends JsonResource
+class RecommendationCourseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,9 +23,6 @@ class CourseResource extends JsonResource
             'muscles' => $this->muscles,
             'type' => $this->type,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
-            'recommendations' => self::collection($this->whenLoaded('recommendations')),
-            'rating' => $this->rating,
-            'active' => $this->active
         ];
     }
 }

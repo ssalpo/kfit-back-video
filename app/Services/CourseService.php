@@ -27,6 +27,10 @@ class CourseService
 
         if ($course->cover) $this->tempFileService->moveFromTmpFolder(TempFile::FOLDER_COURSE_COVER, $course->cover);
 
+        if($recommendations = Arr::get($data, 'recommendations')) {
+            $course->recommendations()->sync($recommendations);
+        }
+
         return $course;
     }
 
@@ -35,9 +39,9 @@ class CourseService
      *
      * @param int $id
      * @param array $data
-     * @return Course
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      */
-    public function update(int $id, array $data): Course
+    public function update(int $id, array $data): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
         $course = Course::findOrFail($id);
 
@@ -51,6 +55,10 @@ class CourseService
             $this->tempFileService->moveFromTmpFolder(TempFile::FOLDER_COURSE_COVER, $course->cover);
 
             if ($oldCover) $this->tempFileService->removeFileFromFolder(TempFile::FOLDER_COURSE_COVER, $oldCover);
+        }
+
+        if($recommendations = Arr::get($data, 'recommendations')) {
+            $course->recommendations()->sync($recommendations);
         }
 
         return $course->refresh();

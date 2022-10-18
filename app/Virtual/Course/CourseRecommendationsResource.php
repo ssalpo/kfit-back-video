@@ -6,10 +6,10 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     title="Course resource"
+ *     title="Course recommendations resource"
  * )
  */
-class CourseResource
+class CourseRecommendationsResource
 {
     /**
      * @OA\Property(
@@ -64,14 +64,4 @@ class CourseResource
      * @var int
      */
     private $type;
-
-    /**
-     * @OA\Property(
-     *     title="recommendations",
-     *     @OA\Items(ref="#/components/schemas/CourseRecommendationsResource")
-     * )
-     *
-     * @var array
-     */
-    private $recommendations;
 }

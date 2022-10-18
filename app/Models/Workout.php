@@ -15,6 +15,7 @@ class Workout extends Model
         'source_type',
         'source_id',
         'is_public',
+        'rating',
         'active'
     ];
 
@@ -23,8 +24,33 @@ class Workout extends Model
         'active' => 'boolean'
     ];
 
+    public function scopeClientFavorites($q): void
+    {
+        $q->whereHas('favorites', fn($q) => $q->where('client_id', app(ApiUser::class)->id));
+    }
+
+    public function scopeFilter($q)
+    {
+        $q->when(request('favorite'), fn($q) => $q->clientFavorites());
+    }
+
     public function clientProgress()
     {
         return $this->morphOne(Progress::class, 'progressable')->whereClientId(app(ApiUser::class)->id);
+    }
+
+    public function recommendations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(__CLASS__, 'recommended_workouts', 'workout_id', 'recommended_id');
+    }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoriteable');
+    }
+
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }

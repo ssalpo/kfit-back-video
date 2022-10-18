@@ -62,15 +62,14 @@ class AuthServiceFakerHelper
 
     public static function relatedCourses(): array
     {
-        $courses = Course::factory(10)->create()
-            ->each(fn($course) => $course->update(['is_public' => false]))
+        $courses = CourseHelper::makeWithRecommendations()
             ->pluck('id')->toArray();
 
         $data = [];
 
         foreach ($courses as $course) {
             $data[] = [
-                'product_id' => rand(1, 10),
+                'product_id' => random_int(1, 10),
                 'related_id' => $course,
                 'related_type' => GoodsType::COURSE
             ];
@@ -85,15 +84,14 @@ class AuthServiceFakerHelper
 
     public static function relatedWorkouts(): array
     {
-        $workouts = Workout::factory(10)->create()
-            ->each(fn($workout) => $workout->update(['is_public' => false]))
+        $workouts = WorkoutHelper::makeWithRecommendations()
             ->pluck('id')->toArray();
 
         $data = [];
 
         foreach ($workouts as $workout) {
             $data[] = [
-                'product_id' => rand(1, 10),
+                'product_id' => random_int(1, 10),
                 'related_id' => $workout,
                 'related_type' => GoodsType::WORKOUT
             ];
