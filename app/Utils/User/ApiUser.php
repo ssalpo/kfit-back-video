@@ -22,10 +22,12 @@ class ApiUser
         return $this->user->get($name);
     }
 
-    public function hasRole(string $name): bool
+    public function hasRole(array $roles): bool
     {
-        foreach (explode(',', $name) as $role) {
-            if (in_array($role, $this->roles)) return true;
+        foreach ($roles as $role) {
+            if (in_array($role, $this->roles, true)) {
+                return true;
+            }
         }
 
         return false;
