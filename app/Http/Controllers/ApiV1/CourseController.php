@@ -83,9 +83,13 @@ class CourseController extends Controller
      *         )
      *      ),
      *     @OA\Response(
-     *         response=200,
+     *         response=201,
      *         description="OK",
      *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
+     *     ),
+     *     @OA\Response(
+     *         response=419,
+     *         description="Validation error"
      *     )
      * )
      *
