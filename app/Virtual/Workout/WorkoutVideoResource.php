@@ -6,10 +6,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     title="Workout video resource",
- *     @OA\Xml(
- *         name="WorkoutVideoResource"
- *     )
+ *     title="Workout video resource"
  * )
  */
 class WorkoutVideoResource

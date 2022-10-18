@@ -3,6 +3,7 @@
 namespace Tests\Feature\V1;
 
 use App\Services\TempFileService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\Helpers\AuthServiceFakerHelper;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
+    use RefreshDatabase;
+
     const RESOURCE_STRUCTURE = ['id', 'user_filename'];
 
     /**
@@ -38,7 +41,7 @@ class FileTest extends TestCase
         Storage::disk('local')->assertExists($path);
     }
 
-    public function test_user_can_view_their_avatar_and_resize_it()
+    public function test_user_can_view_their_course_cover_and_resize_it()
     {
         Storage::fake('local');
 

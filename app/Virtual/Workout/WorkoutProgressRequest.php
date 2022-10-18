@@ -6,10 +6,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     title="Workout progress request",
- *     @OA\Xml(
- *         name="WorkoutProgressRequest"
- *     )
+ *     title="Workout progress request"
  * )
  */
 class WorkoutProgressRequest

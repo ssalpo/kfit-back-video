@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Constants\Workout;
+use App\Constants\Rating;
 use Illuminate\Foundation\Http\FormRequest;
 
-class WorkoutRequest extends FormRequest
+class RatingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,9 @@ class WorkoutRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|min:3|max:255',
-            'source_type' => 'required|numeric|in:' . implode(',', Workout::SOURCE_LIST),
-            'source_id' => 'required|string',
-            'is_public' => 'required|boolean',
-            'recommendations' => 'nullable|array'
+            'id' => 'required|numeric',
+            'type' => 'required|in:' . implode(',', Rating::TYPES),
+            'rating' => 'required|numeric|between:1,5'
         ];
     }
 }

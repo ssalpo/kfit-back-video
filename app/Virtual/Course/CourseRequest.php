@@ -2,12 +2,11 @@
 
 namespace App\Virtual\Course;
 
+use OpenApi\Annotations as OA;
+
 /**
  * @OA\Schema(
- *     title="Course request",
- *     @OA\Xml(
- *         name="CourseRequest"
- *     )
+ *     title="Course request"
  * )
  */
 class CourseRequest

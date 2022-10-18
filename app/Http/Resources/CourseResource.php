@@ -23,6 +23,8 @@ class CourseResource extends JsonResource
             'muscles' => $this->muscles,
             'type' => $this->type,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
+            'recommendations' => self::collection($this->whenLoaded('recommendations')),
+            'rating' => $this->rating
         ];
     }
 }

@@ -12,15 +12,34 @@ use Tests\TestCase;
 
 class CourseTest extends TestCase
 {
+    use RefreshDatabase;
+
     const RESOURCE_STRUCTURE = [
-        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type'
+        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type', 'rating'
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        Course::factory(10)->create();
+         CourseHelper::makeWithRecommendations();
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_see_list_of_all_courses()
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        $response = $this->get('/api/v1/courses/all');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => self::RESOURCE_STRUCTURE
+                ]
+            ]);
     }
 
     /**
@@ -48,18 +67,20 @@ class CourseTest extends TestCase
     {
         AuthServiceFakerHelper::actAsAdmin();
 
+        $recommendations = Course::factory(10)->create()->pluck('id')->toArray();
+
         $form = [
             'name' => 'First course for clients',
             'duration' => '2:15',
             'level' => 1,
             'muscles' => 'some muscules',
-            'type' => 'course'
+            'type' => 'course',
+            'recommendations' => $recommendations
         ];
 
         $response = $this->postJson('/api/v1/courses', $form);
 
         $response->assertStatus(201)
-            ->assertJson(['data' => $form])
             ->assertJsonStructure([
                 'data' => self::RESOURCE_STRUCTURE
             ]);
@@ -91,8 +112,11 @@ class CourseTest extends TestCase
 
         $record = CourseHelper::getOneRandom();
 
+        $recommendations = Course::factory(10)->create()->pluck('id')->toArray();
+
         $form = [
-            'name' => 'Updated course check'
+            'name' => 'Updated course check',
+            'recommendations' => $recommendations
         ];
 
         $response = $this->putJson('/api/v1/courses/' . $record->id, $form);
