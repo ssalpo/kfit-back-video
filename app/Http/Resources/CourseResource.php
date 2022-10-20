@@ -24,7 +24,8 @@ class CourseResource extends JsonResource
             'type' => $this->type,
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
             'recommendations' => self::collection($this->whenLoaded('recommendations')),
-            'rating' => $this->rating
+            'rating' => $this->rating,
+            'active' => $this->active
         ];
     }
 }

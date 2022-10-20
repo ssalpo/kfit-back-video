@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ApiV1;
 
 use App\ApiRequests\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseActivityRequest;
 use App\Http\Requests\CourseRequest;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
@@ -12,8 +13,6 @@ use App\Utils\User\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use OpenApi\Annotations as OA;
-use function abort;
-use function app;
 
 class CourseController extends Controller
 {
@@ -84,9 +83,13 @@ class CourseController extends Controller
      *         )
      *      ),
      *     @OA\Response(
-     *         response=200,
+     *         response=201,
      *         description="OK",
      *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
+     *     ),
+     *     @OA\Response(
+     *         response=419,
+     *         description="Validation error"
      *     )
      * )
      *
@@ -245,7 +248,7 @@ class CourseController extends Controller
      *         )
      *      ),
      *     @OA\Response(
-     *         response=202,
+     *         response=200,
      *         description="OK",
      *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
      *     )
@@ -269,5 +272,44 @@ class CourseController extends Controller
         );
 
         return new CourseResource($course->refresh());
+    }
+
+    /**
+     * Change course activity status
+     *
+     * @OA\Put(
+     *     path="/courses/{course}/change-activity",
+     *     tags={"Courses"},
+     *     summary="Change course activity status",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="course",
+     *         required=true,
+     *         @OA\Schema(type="int"),
+     *     ),
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/CourseActivityRequest")
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(ref="#/components/schemas/CourseResource")
+     *     )
+     * )
+     *
+     * @param CourseActivityRequest $request
+     * @param Course $course
+     * @return CourseResource
+     */
+    public function changeActivity(CourseActivityRequest $request, Course $course): CourseResource
+    {
+        $course->update(['active' => $request->status]);
+
+        return new CourseResource(
+            $course->refresh()
+        );
     }
 }

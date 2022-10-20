@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ApiV1;
 
 use App\Constants\GoodsType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WorkoutActivityRequest;
 use App\Http\Requests\WorkoutRequest;
 use App\Http\Requests\WorkoutVideoUploadRequest;
 use App\Http\Resources\WorkoutResource;
@@ -277,6 +278,45 @@ class WorkoutController extends Controller
         );
 
         return new WorkoutResource($workout->load('recommendations')->refresh());
+    }
+
+    /**
+     * Change workout activity status
+     *
+     * @OA\Put(
+     *     path="/workouts/{workout}/change-activity",
+     *     tags={"Workouts"},
+     *     summary="Change workout activity status",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="workout",
+     *         required=true,
+     *         @OA\Schema(type="int"),
+     *     ),
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/WorkoutActivityRequest")
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(ref="#/components/schemas/WorkoutResource")
+     *     )
+     * )
+     *
+     * @param WorkoutActivityRequest $request
+     * @param Workout $workout
+     * @return WorkoutResource
+     */
+    public function changeActivity(WorkoutActivityRequest $request, Workout $workout): WorkoutResource
+    {
+        $workout->update(['active' => $request->status]);
+
+        return new WorkoutResource(
+            $workout->refresh()
+        );
     }
 
     /**

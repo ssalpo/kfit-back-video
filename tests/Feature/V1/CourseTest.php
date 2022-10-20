@@ -14,8 +14,8 @@ class CourseTest extends TestCase
 {
     use RefreshDatabase;
 
-    const RESOURCE_STRUCTURE = [
-        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type', 'rating'
+    public const RESOURCE_STRUCTURE = [
+        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type', 'rating', 'active'
     ];
 
     protected function setUp(): void
@@ -81,6 +81,7 @@ class CourseTest extends TestCase
         $response = $this->postJson('/api/v1/courses', $form);
 
         $response->assertStatus(201)
+            ->assertJson(['data' => $form])
             ->assertJsonStructure([
                 'data' => self::RESOURCE_STRUCTURE
             ]);
@@ -212,5 +213,26 @@ class CourseTest extends TestCase
                 'data' => array_merge(self::RESOURCE_STRUCTURE, ['progress'])
             ])
             ->assertJsonPath('data.progress.status', ProgressStatus::START);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_change_courses_activity_status()
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        $course = CourseHelper::getOneRandom();
+
+        $response = $this->post('/api/v1/courses/' . $course->id . '/change-activity', [
+            'status' => 1
+        ]);
+
+        $response->assertStatus(200);
+
+        $response = $this->getJson('/api/v1/courses/' . $course->id);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.active', true);
     }
 }

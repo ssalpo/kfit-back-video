@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('check.token')->group(function () {
     // Course routes
     Route::get('courses/my', [CourseController::class, 'my']);
-    Route::post('/courses/{course}/change-progress', [CourseController::class, 'changeProgress']);
     Route::get('/courses/all', [CourseController::class, 'all']);
+    Route::post('/courses/{course}/change-progress', [CourseController::class, 'changeProgress']);
+    Route::post('/courses/{course}/change-activity', [CourseController::class, 'changeActivity']);
     Route::apiResource('courses', CourseController::class);
 
     // Favorites route
@@ -26,6 +27,7 @@ Route::middleware('check.token')->group(function () {
     Route::get('/workouts/my', [WorkoutController::class, 'my']);
     Route::get('/workouts/all', [WorkoutController::class, 'all']);
     Route::post('/workouts/{workout}/change-progress', [WorkoutController::class, 'changeProgress']);
+    Route::post('/workouts/{workout}/change-activity', [WorkoutController::class, 'changeActivity']);
     Route::get('/workouts/{workout}/videos', [WorkoutController::class, 'getExternalVideos']);
     Route::post('/workouts/{workout}/videos/upload', [WorkoutController::class, 'uploadVideoById']);
     Route::get('/workouts/{workout}/videos/{video}', [WorkoutController::class, 'getVideoById']);

@@ -20,10 +20,12 @@ class Course extends Model
         'description',
         'is_public',
         'rating',
+        'active',
     ];
 
     protected $casts = [
-        'is_public' => 'boolean'
+        'is_public' => 'boolean',
+        'active' => 'boolean'
     ];
 
     public function scopeClientFavorites($q): void

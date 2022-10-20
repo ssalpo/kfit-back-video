@@ -16,10 +16,12 @@ class Workout extends Model
         'source_id',
         'is_public',
         'rating',
+        'active'
     ];
 
     protected $casts = [
-        'is_public' => 'boolean'
+        'is_public' => 'boolean',
+        'active' => 'boolean'
     ];
 
     public function scopeClientFavorites($q): void

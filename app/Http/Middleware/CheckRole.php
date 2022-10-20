@@ -23,9 +23,9 @@ class CheckRole
      * @param string $role
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if(!$this->apiUser->hasRole($role)) {
+        if(!$this->apiUser->hasRole($roles)) {
             abort(403, 'У вас недостаточно прав для выполнения данного действия!');
         }
 

@@ -6,8 +6,6 @@ use App\Constants\ProgressStatus;
 use App\Models\Workout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\WorkoutHelper;
@@ -18,9 +16,10 @@ class WorkoutTest extends TestCase
 {
     use RefreshDatabase;
 
-    const RESOURCE_STRUCTURE = [
-        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations', 'rating'
+    public const RESOURCE_STRUCTURE = [
+        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations', 'rating', 'active'
     ];
+
 
     protected function setUp(): void
     {
@@ -85,10 +84,12 @@ class WorkoutTest extends TestCase
         $response = $this->postJson('/api/v1/workouts', $form);
 
         $response->assertStatus(201)
+            ->assertJson(['data' => $form])
             ->assertJsonStructure([
                 'data' => self::RESOURCE_STRUCTURE
             ]);
     }
+
 
     /**
      * @return void
@@ -267,5 +268,27 @@ class WorkoutTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data']);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_change_workout_activity_status()
+    {
+        AuthServiceFakerHelper::actAsAdmin();
+
+        $workout = WorkoutHelper::getOneRandom();
+
+        $response = $this->post('/api/v1/workouts/' . $workout->id . '/change-activity', [
+            'status' => 1
+        ]);
+
+        $response->assertStatus(200);
+
+        $response = $this->getJson('/api/v1/workouts/' . $workout->id);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.active', true);
     }
 }
