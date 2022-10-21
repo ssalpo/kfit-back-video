@@ -43,7 +43,7 @@ class CourseResource
      *     title="level"
      * )
      *
-     * @var int
+     * @var string
      */
     private $level;
 
@@ -52,7 +52,7 @@ class CourseResource
      *     title="muscles"
      * )
      *
-     * @var int
+     * @var string
      */
     private $muscles;
 
@@ -61,7 +61,7 @@ class CourseResource
      *     title="type"
      * )
      *
-     * @var int
+     * @var string
      */
     private $type;
 
