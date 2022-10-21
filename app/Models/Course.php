@@ -56,6 +56,13 @@ class Course extends Model
         }
     }
 
+    public function scopeOnlyPublic($q, $show = null)
+    {
+        if($show) {
+            $q->where('is_public', true);
+        }
+    }
+
     public function clientProgress()
     {
         return $this->morphOne(Progress::class, 'progressable')->whereClientId(app(ApiUser::class)->id);
