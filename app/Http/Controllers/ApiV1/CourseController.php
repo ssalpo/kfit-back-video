@@ -32,6 +32,47 @@ class CourseController extends Controller
      *     path="/courses",
      *     tags={"Courses"},
      *     summary="Display a listing of the resource.",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="direction",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="duration",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="duration",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="active_area",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="inventory",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="pulse_zone",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
      *     @OA\Response(
      *          response=200,
      *          description="OK",
@@ -44,7 +85,7 @@ class CourseController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return CourseResource::collection(
-            Course::with('recommendations')->paginate()
+            Course::with('recommendations')->filter()->paginate()
         );
     }
 
@@ -207,6 +248,47 @@ class CourseController extends Controller
      *     path="/courses/my",
      *     tags={"Courses"},
      *     summary="Display a list of related courses for current user",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="direction",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="duration",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="duration",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="active_area",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="inventory",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="pulse_zone",
+     *         description="Filter param",
+     *         required=false,
+     *         @OA\Schema(type="string"),
+     *     ),
      *     @OA\Response(
      *          response=200,
      *          description="OK",
