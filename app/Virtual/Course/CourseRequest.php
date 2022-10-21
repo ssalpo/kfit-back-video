@@ -76,6 +76,16 @@ class CourseRequest
 
     /**
      * @OA\Property(
+     *     title="recommendations",
+     *     @OA\Items(type="integer")
+     * )
+     *
+     * @var array
+     */
+    private $recommendations;
+
+    /**
+     * @OA\Property(
      *     title="course_type"
      * )
      *
