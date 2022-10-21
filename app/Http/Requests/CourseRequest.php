@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\Course;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CourseRequest extends FormRequest
@@ -27,11 +28,18 @@ class CourseRequest extends FormRequest
             'name' => 'required|min:3|max:255',
             'cover' => 'nullable|string|max:255',
             'duration' => 'nullable|string|max:255',
-            'level' => 'nullable|numeric',
+            'level' => 'nullable|string|max:255',
             'muscles' => 'nullable|string|max:255',
             'type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'recommendations' => 'nullable|array',
             'is_public' => 'nullable|boolean',
+            'course_type' => 'nullable|numeric|in:' . implode(',', Course::COURSE_TYPES),
+            'trainer_id' => 'nullable|numeric',
+            'direction' => 'nullable|string|max:255',
+            'active_area' => 'nullable|string|max:255',
+            'inventory' => 'nullable|string|max:255',
+            'pulse_zone' => 'nullable|string|max:255',
         ];
     }
 }

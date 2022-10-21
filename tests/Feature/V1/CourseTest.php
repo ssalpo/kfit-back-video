@@ -6,6 +6,7 @@ use App\Constants\ProgressStatus;
 use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\CourseHelper;
 use Tests\TestCase;
@@ -15,14 +16,19 @@ class CourseTest extends TestCase
     use RefreshDatabase;
 
     public const RESOURCE_STRUCTURE = [
-        'id', 'name', 'cover', 'duration', 'level', 'muscles', 'type', 'rating', 'active'
+        'id', 'name', 'cover', 'duration',
+        'level', 'muscles', 'type',
+        'rating', 'active', 'description',
+        'is_public', 'course_type', 'trainer_id',
+        'direction', 'active_area', 'inventory',
+        'pulse_zone',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-         CourseHelper::makeWithRecommendations();
+        CourseHelper::makeWithRecommendations();
     }
 
     /**
@@ -72,19 +78,25 @@ class CourseTest extends TestCase
         $form = [
             'name' => 'First course for clients',
             'duration' => '2:15',
-            'level' => 1,
+            'level' => 'начинающий',
             'muscles' => 'some muscules',
             'type' => 'course',
-            'recommendations' => $recommendations
+            'recommendations' => $recommendations,
+            'course_type' => \App\Constants\Course::TYPE_COURSE,
+            'trainer_id' => 1,
+            'direction' => 'пилатес',
+            'active_area' => 'ягодицы',
+            'inventory' => 'утяжелители',
+            'pulse_zone' => '140',
         ];
 
         $response = $this->postJson('/api/v1/courses', $form);
 
         $response->assertStatus(201)
-            ->assertJson(['data' => $form])
             ->assertJsonStructure([
-                'data' => self::RESOURCE_STRUCTURE
-            ]);
+                'data' => Arr::except(self::RESOURCE_STRUCTURE, 'recommendations')
+            ])
+            ->assertJsonCount(count($form['recommendations']), 'data.recommendations');
     }
 
     /**

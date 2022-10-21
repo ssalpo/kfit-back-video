@@ -21,6 +21,12 @@ class Course extends Model
         'is_public',
         'rating',
         'active',
+        'course_type',
+        'trainer_id',
+        'direction',
+        'active_area',
+        'inventory',
+        'pulse_zone',
     ];
 
     protected $casts = [
@@ -36,6 +42,18 @@ class Course extends Model
     public function scopeFilter($q)
     {
         $q->when(request('favorite'), fn($q) => $q->clientFavorites());
+
+        $fieldsToSearch = [
+            'duration',
+            'direction',
+            'active_area',
+            'inventory',
+            'pulse_zone',
+        ];
+
+        foreach ($fieldsToSearch as $field) {
+            $q->when(request($field), fn($q, $value) => $q->where($field, 'ilike', "%${value}%"));
+        }
     }
 
     public function clientProgress()

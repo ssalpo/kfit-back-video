@@ -6,6 +6,7 @@ use App\Constants\ProgressStatus;
 use App\Models\Workout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Tests\Helpers\AuthServiceFakerHelper;
 use Tests\Helpers\WorkoutHelper;
@@ -84,10 +85,10 @@ class WorkoutTest extends TestCase
         $response = $this->postJson('/api/v1/workouts', $form);
 
         $response->assertStatus(201)
-            ->assertJson(['data' => $form])
             ->assertJsonStructure([
-                'data' => self::RESOURCE_STRUCTURE
-            ]);
+                'data' => Arr::except(self::RESOURCE_STRUCTURE, 'recommendations')
+            ])
+            ->assertJsonCount(count($form['recommendations']), 'data.recommendations');
     }
 
 

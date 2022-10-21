@@ -31,6 +31,8 @@ class CourseService
             $course->recommendations()->sync($recommendations);
         }
 
+        $course->load('recommendations');
+
         return $course;
     }
 
