@@ -101,7 +101,7 @@ class CourseController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/CourseCollectionResource")
+     *          @OA\JsonContent(ref="#/components/schemas/CourseAllCollectionResource")
      *      )
      * )
      *
