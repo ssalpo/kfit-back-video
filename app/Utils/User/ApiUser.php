@@ -37,4 +37,9 @@ class ApiUser
     {
         return $this->id && count($this->roles) === 0;
     }
+
+    public function isAuth(): bool
+    {
+        return !is_null($this->name);
+    }
 }

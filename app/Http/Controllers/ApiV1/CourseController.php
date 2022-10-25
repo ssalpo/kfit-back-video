@@ -20,7 +20,7 @@ class CourseController extends Controller
 
     public function __construct(CourseService $courseService)
     {
-        $this->middleware('role:admin')->except('index', 'my', 'changeProgress');
+        $this->middleware('role:admin')->except('index', 'show', 'my', 'changeProgress');
 
         $this->courseService = $courseService;
     }
@@ -85,7 +85,9 @@ class CourseController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return CourseResource::collection(
-            Course::with('recommendations')->filter()->paginate()
+            Course::with('recommendations')->onlyPublic(
+                !app(ApiUser::class)->isAuth()
+            )->filter()->paginate()
         );
     }
 
@@ -99,7 +101,7 @@ class CourseController extends Controller
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\JsonContent(ref="#/components/schemas/CourseCollectionResource")
+     *          @OA\JsonContent(ref="#/components/schemas/CourseAllCollectionResource")
      *      )
      * )
      *
@@ -164,11 +166,15 @@ class CourseController extends Controller
      *      )
      * )
      *
-     * @param Course $course
+     * @param int $id
      * @return CourseResource
      */
-    public function show(Course $course): CourseResource
+    public function show(int $id): CourseResource
     {
+        $course = Course::onlyPublic(
+            !app(ApiUser::class)->isAuth()
+        )->whereId($id)->firstOrFail();
+
         $course->load('recommendations');
 
         return new CourseResource($course);
