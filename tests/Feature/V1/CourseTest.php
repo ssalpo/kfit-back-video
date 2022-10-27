@@ -84,6 +84,7 @@ class CourseTest extends TestCase
             'recommendations' => $recommendations,
             'course_type' => \App\Constants\Course::TYPE_COURSE,
             'trainer_id' => 1,
+            'active' => 1,
             'direction' => 'пилатес',
             'active_area' => 'ягодицы',
             'inventory' => 'утяжелители',
@@ -167,10 +168,6 @@ class CourseTest extends TestCase
         AuthServiceFakerHelper::actAsAdminGuest();
 
         $record = CourseHelper::getOneRandom();
-
-        // Show
-        $this->getJson('/api/v1/courses/' . $record->id)
-            ->assertStatus(403);
 
         // Add
         $this->postJson('/api/v1/courses')

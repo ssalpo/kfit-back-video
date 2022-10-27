@@ -8,15 +8,20 @@ use App\Http\Controllers\ApiV1\RatingController;
 use App\Http\Controllers\ApiV1\WorkoutController;
 use Illuminate\Support\Facades\Route;
 
+Route::middleware('check.token')->group(function () {
+    // Course routes
+    Route::get('/courses/my', [CourseController::class, 'my']);
+    Route::get('/courses/all', [CourseController::class, 'all']);
+});
+
 Route::middleware('check.token:silence')->group(function () {
+    // Course routes
     Route::get('/courses', [CourseController::class, 'index']);
     Route::get('/courses/{course}', [CourseController::class, 'show']);
 });
 
 Route::middleware('check.token')->group(function () {
     // Course routes
-    Route::get('courses/my', [CourseController::class, 'my']);
-    Route::get('/courses/all', [CourseController::class, 'all']);
     Route::post('/courses/{course}/change-progress', [CourseController::class, 'changeProgress']);
     Route::post('/courses/{course}/change-activity', [CourseController::class, 'changeActivity']);
     Route::apiResource('courses', CourseController::class)->except('index', 'show');
