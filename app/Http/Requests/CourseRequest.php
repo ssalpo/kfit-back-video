@@ -33,6 +33,7 @@ class CourseRequest extends FormRequest
             'type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'recommendations' => 'nullable|array',
+            'active' => 'required|boolean',
             'is_public' => 'nullable|boolean',
             'course_type' => 'nullable|numeric|in:' . implode(',', Course::COURSE_TYPES),
             'trainer_id' => 'nullable|numeric',
