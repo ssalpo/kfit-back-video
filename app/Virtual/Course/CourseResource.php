@@ -13,6 +13,15 @@ class CourseResource
 {
     /**
      * @OA\Property(
+     *     title="id"
+     * )
+     *
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @OA\Property(
      *     title="name"
      * )
      *
@@ -22,7 +31,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="cover"
+     *     title="cover",
+     *     nullable=true
      * )
      *
      * @var string
@@ -31,7 +41,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="duration"
+     *     title="duration",
+     *     nullable=true
      * )
      *
      * @var string
@@ -40,7 +51,10 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="level"
+     *     title="level",
+     *     default="1",
+     *     description="Available labels [Beginner=1, Middle=2, Advanced=3]",
+     *     example="2"
      * )
      *
      * @var string
@@ -49,7 +63,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="muscles"
+     *     title="muscles",
+     *     nullable=true
      * )
      *
      * @var string
@@ -58,7 +73,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="type"
+     *     title="type",
+     *     nullable=true
      * )
      *
      * @var string
@@ -86,7 +102,10 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="course_type"
+     *     title="course_type",
+     *     description="Course type, available types [Course=1, Workout=2]",
+     *     default="1",
+     *     example="2"
      * )
      *
      * @var int
@@ -95,7 +114,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="trainer_id"
+     *     title="trainer_id",
+     *     nullable=true
      * )
      *
      * @var int
@@ -104,7 +124,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="direction"
+     *     title="direction",
+     *     nullable=true
      * )
      *
      * @var string
@@ -113,7 +134,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="active_area"
+     *     title="active_area",
+     *     nullable=true
      * )
      *
      * @var string
@@ -122,7 +144,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="inventory"
+     *     title="inventory",
+     *     nullable=true
      * )
      *
      * @var string
@@ -131,7 +154,8 @@ class CourseResource
 
     /**
      * @OA\Property(
-     *     title="pulse_zone"
+     *     title="pulse_zone",
+     *     nullable=true
      * )
      *
      * @var string

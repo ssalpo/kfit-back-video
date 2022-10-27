@@ -22,7 +22,9 @@ class WorkoutResource
 
     /**
      * @OA\Property(
-     *     title="source_type"
+     *     title="source_type",
+     *     description="Source type for external services. Available source [kinescope=1]",
+     *     nullable=true
      * )
      *
      * @var int
@@ -31,7 +33,9 @@ class WorkoutResource
 
     /**
      * @OA\Property(
-     *     title="source_id"
+     *     title="source_id",
+     *     description="Source id need for external services",
+     *     nullable=true
      * )
      *
      * @var string
