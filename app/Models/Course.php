@@ -21,6 +21,7 @@ class Course extends Model
         'is_public',
         'rating',
         'active',
+        'course_type',
         'trainer_id',
         'direction',
         'active_area',
