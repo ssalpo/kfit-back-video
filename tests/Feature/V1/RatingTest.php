@@ -29,7 +29,10 @@ class RatingTest extends TestCase
 
         $response = $this->getJson('/api/v1/courses/my');
 
-        $ratings = array_values(array_filter($response->json('data'), fn($item) => $item['rating'] != 0));
+        $ratings = array_values(array_filter(
+            $response->json('data') ?? [],
+            static fn($item) => $item['rating'] !== 0
+        ));
 
         $response->assertStatus(200);
 

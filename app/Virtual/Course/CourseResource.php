@@ -102,6 +102,15 @@ class CourseResource
 
     /**
      * @OA\Property(
+     *     title="active"
+     * )
+     *
+     * @var bool
+     */
+    private $active;
+
+    /**
+     * @OA\Property(
      *     title="course_type",
      *     description="Course type, available types [Course=1, Workout=2]",
      *     default="1",

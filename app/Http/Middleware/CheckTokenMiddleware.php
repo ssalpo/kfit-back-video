@@ -24,7 +24,7 @@ class CheckTokenMiddleware
      * @param ApiUser $apiUser
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $status)
+    public function handle(Request $request, Closure $next, string $status = null)
     {
         $response = Http::withAuth()->get('/api/v1/users/me');
 
