@@ -21,7 +21,7 @@ class CourseTest extends TestCase
         'rating', 'active', 'description',
         'is_public', 'course_type', 'trainer_id',
         'direction', 'active_area', 'inventory',
-        'pulse_zone',
+        'pulse_zone', 'goal', 'workouts'
     ];
 
     protected function setUp(): void
@@ -43,7 +43,7 @@ class CourseTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => self::RESOURCE_STRUCTURE
+                    '*' => array_diff(self::RESOURCE_STRUCTURE, ['workouts'])
                 ]
             ]);
     }
@@ -89,6 +89,7 @@ class CourseTest extends TestCase
             'active_area' => 'ягодицы',
             'inventory' => 'утяжелители',
             'pulse_zone' => '140',
+            'goal' => 'goal1'
         ];
 
         $response = $this->postJson('/api/v1/courses', $form);
@@ -156,7 +157,7 @@ class CourseTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data' => self::RESOURCE_STRUCTURE
+                'data' => array_diff(self::RESOURCE_STRUCTURE, ['workouts'])
             ]);
     }
 
@@ -198,7 +199,7 @@ class CourseTest extends TestCase
             ->assertJsonStructure(['data', 'links', 'meta'])
             ->assertJsonStructure([
                 'data' => [
-                    '*' => self::RESOURCE_STRUCTURE
+                    '*' => array_diff(self::RESOURCE_STRUCTURE, ['workouts'])
                 ]
             ]);
     }
@@ -219,7 +220,9 @@ class CourseTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data' => array_merge(self::RESOURCE_STRUCTURE, ['progress'])
+                'data' => array_diff(
+                    array_merge(self::RESOURCE_STRUCTURE, ['progress']), ['workouts']
+                )
             ])
             ->assertJsonPath('data.progress.status', ProgressStatus::START);
     }

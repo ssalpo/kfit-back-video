@@ -34,6 +34,8 @@ class CourseResource extends JsonResource
             'active_area' => $this->active_area,
             'inventory' => $this->inventory,
             'pulse_zone' => $this->pulse_zone,
+            'goal' => $this->goal,
+            'workouts' => WorkoutResource::collection($this->whenLoaded('workouts'))
         ];
     }
 }

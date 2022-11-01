@@ -152,4 +152,24 @@ class CourseRequest
      * @var string
      */
     private $pulse_zone;
+
+    /**
+     * @OA\Property(
+     *     title="goal",
+     *     nullable=true
+     * )
+     *
+     * @var string
+     */
+    private $goal;
+
+    /**
+     * @OA\Property(
+     *     title="workouts",
+     *     @OA\Items(type="integer")
+     * )
+     *
+     * @var array
+     */
+    private $workouts;
 }

@@ -43,7 +43,7 @@ class WorkoutController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return WorkoutResource::collection(
-            Workout::with('recommendations')->paginate()
+            Workout::with('recommendations', 'course')->paginate()
         );
     }
 
@@ -129,7 +129,7 @@ class WorkoutController extends Controller
      */
     public function show(Workout $workout): WorkoutResource
     {
-        $workout->load('recommendations');
+        $workout->load('recommendations', 'course');
 
         return new WorkoutResource($workout);
     }
@@ -166,7 +166,7 @@ class WorkoutController extends Controller
      */
     public function update(WorkoutRequest $request, Workout $workout): WorkoutResource
     {
-        $workout->load('recommendations');
+        $workout->load('recommendations', 'course');
 
         $workout->update($request->validated());
 
@@ -228,7 +228,7 @@ class WorkoutController extends Controller
     {
         return WorkoutResource::collection(
             Workout::whereIn('id', $this->getRelatedWorkoutIds())
-                ->with('recommendations')
+                ->with('recommendations', 'course')
                 ->filter()
                 ->paginate()
         );
@@ -277,7 +277,7 @@ class WorkoutController extends Controller
             ['status' => (int)$request->status]
         );
 
-        return new WorkoutResource($workout->load('recommendations')->refresh());
+        return new WorkoutResource($workout->load('recommendations', 'course')->refresh());
     }
 
     /**

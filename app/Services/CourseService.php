@@ -31,7 +31,11 @@ class CourseService
             $course->recommendations()->sync($recommendations);
         }
 
-        $course->load('recommendations');
+        if($workouts = Arr::get($data, 'workouts')) {
+            $course->workouts()->sync($workouts);
+        }
+
+        $course->load('recommendations', 'workouts');
 
         return $course;
     }
@@ -62,6 +66,12 @@ class CourseService
         if($recommendations = Arr::get($data, 'recommendations')) {
             $course->recommendations()->sync($recommendations);
         }
+
+        if($workouts = Arr::get($data, 'workouts')) {
+            $course->workouts()->sync($workouts);
+        }
+
+        $course->load('workouts');
 
         return $course->refresh();
     }
