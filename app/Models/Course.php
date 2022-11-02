@@ -27,6 +27,7 @@ class Course extends Model
         'active_area',
         'inventory',
         'pulse_zone',
+        'goal',
     ];
 
     protected $casts = [
@@ -82,5 +83,10 @@ class Course extends Model
     public function ratings()
     {
         return $this->morphMany(Rating::class, 'ratingable');
+    }
+
+    public function workouts()
+    {
+        return $this->hasMany(Workout::class);
     }
 }

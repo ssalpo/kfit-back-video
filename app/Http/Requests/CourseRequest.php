@@ -41,6 +41,8 @@ class CourseRequest extends FormRequest
             'active_area' => 'nullable|string|max:255',
             'inventory' => 'nullable|string|max:255',
             'pulse_zone' => 'nullable|string|max:255',
+            'goal' => 'nullable|string|max:255',
+            'workouts' => 'nullable|array'
         ];
     }
 }

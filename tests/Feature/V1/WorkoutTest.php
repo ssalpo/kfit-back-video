@@ -18,7 +18,10 @@ class WorkoutTest extends TestCase
     use RefreshDatabase;
 
     public const RESOURCE_STRUCTURE = [
-        'id', 'title', 'source_type', 'source_id', 'is_public', 'recommendations', 'rating', 'active'
+        'id', 'title', 'source_type',
+        'source_id', 'is_public',
+        'recommendations', 'rating', 'active',
+        'course'
     ];
 
 
@@ -41,7 +44,7 @@ class WorkoutTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations'])
+                    '*' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations', 'course'])
                 ]
             ]);
     }
@@ -86,7 +89,7 @@ class WorkoutTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'data' => Arr::except(self::RESOURCE_STRUCTURE, 'recommendations')
+                'data' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations', 'course'])
             ])
             ->assertJsonCount(count($form['recommendations']), 'data.recommendations');
     }
@@ -146,7 +149,7 @@ class WorkoutTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'data' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations'])
+                'data' => array_diff(self::RESOURCE_STRUCTURE, ['recommendations', 'course'])
             ]);
     }
 

@@ -51,4 +51,14 @@ class WorkoutResource
      * @var array
      */
     private $recommendations;
+
+    /**
+     * @OA\Property(
+     *     title="course",
+     *     @OA\Schema(ref="#/components/schemas/CourseResource")
+     * )
+     *
+     * @var object
+     */
+    private $course;
 }

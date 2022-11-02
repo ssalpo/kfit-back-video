@@ -16,7 +16,8 @@ class Workout extends Model
         'source_id',
         'is_public',
         'rating',
-        'active'
+        'active',
+        'course_id'
     ];
 
     protected $casts = [
@@ -52,5 +53,10 @@ class Workout extends Model
     public function ratings()
     {
         return $this->morphMany(Rating::class, 'ratingable');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

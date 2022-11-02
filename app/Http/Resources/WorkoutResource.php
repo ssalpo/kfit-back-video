@@ -23,7 +23,8 @@ class WorkoutResource extends JsonResource
             'progress' => $this->when($this->clientProgress, new ProgressResource($this->clientProgress)),
             'recommendations' => self::collection($this->whenLoaded('recommendations')),
             'rating' => $this->rating,
-            'active' => $this->active
+            'active' => $this->active,
+            'course' => CourseResource::make($this->whenLoaded('course'))
         ];
     }
 }

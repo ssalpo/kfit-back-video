@@ -170,4 +170,24 @@ class CourseResource
      * @var string
      */
     private $pulse_zone;
+
+    /**
+     * @OA\Property(
+     *     title="goal",
+     *     nullable=true
+     * )
+     *
+     * @var string
+     */
+    private $goal;
+
+    /**
+     * @OA\Property(
+     *     title="workouts",
+     *     @OA\Items(ref="#/components/schemas/CourseResource")
+     * )
+     *
+     * @var array
+     */
+    private $workouts;
 }

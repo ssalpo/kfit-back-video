@@ -85,7 +85,7 @@ class CourseController extends Controller
     public function index(): AnonymousResourceCollection
     {
         return CourseResource::collection(
-            Course::with('recommendations')->onlyPublic(
+            Course::with('recommendations', 'workouts')->onlyPublic(
                 !app(ApiUser::class)->isAuth()
             )->filter()->paginate()
         );
@@ -175,7 +175,7 @@ class CourseController extends Controller
             !app(ApiUser::class)->isAuth()
         )->whereId($id)->firstOrFail();
 
-        $course->load('recommendations');
+        $course->load('recommendations', 'workouts');
 
         return new CourseResource($course);
     }
@@ -309,7 +309,7 @@ class CourseController extends Controller
         return CourseResource::collection(
             Course::whereIn('id', User::getRelatedCourseIds())
                 ->with('clientProgress')
-                ->with('recommendations')
+                ->with('recommendations', 'workouts')
                 ->orWhere('is_public', true)
                 ->filter()
                 ->paginate()
